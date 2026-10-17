@@ -1,26 +1,765 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light SaaS surfaces */
+  --bg: #f7f8ff;
+  --surface: #ffffff;
+  --line: #e3e8f7;
+  --fg: #0a102e;
+  --muted: #55608a;
+  --accent: #2455f2;
+  --accent-soft: #e9efff;
+
+  /* Deep navy hero band */
+  --hero-a: #0a1435;
+  --hero-b: #16266f;
+  --hero-fg: #ffffff;
+  --hero-muted: #aab6e6;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-hero-a: var(--hero-a);
+  --color-hero-b: var(--hero-b);
+  --color-hero-fg: var(--hero-fg);
+  --color-hero-muted: var(--hero-muted);
+  --font-display: var(--font-bricolage);
+  --font-serif: var(--font-instrument);
+  --font-mono: var(--font-jetbrains);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-bricolage), sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hero-band {
+  background:
+    radial-gradient(
+      60rem 30rem at 75% -10%,
+      rgba(36, 85, 242, 0.38),
+      transparent 65%
+    ),
+    radial-gradient(
+      40rem 22rem at 10% 110%,
+      rgba(120, 146, 255, 0.18),
+      transparent 70%
+    ),
+    linear-gradient(160deg, var(--hero-a), var(--hero-b) 90%);
+}
+
+.serif-accent {
+  font-family: var(--font-instrument), serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes flow-in {
+    from {
+      transform: translateY(12px);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  /* Marquee: the track is duplicated once, so -50% loops seamlessly. */
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .marquee-track {
+    animation: marquee 32s linear infinite;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* Ringing phone: handset wiggle plus two pulsing sound arcs. */
+  @keyframes ring-shake {
+    0%,
+    46%,
+    100% {
+      transform: rotate(0deg) translateY(0);
+    }
+    54% {
+      transform: rotate(16deg) translateY(-1.5px);
+    }
+    62% {
+      transform: rotate(-14deg) translateY(-1.5px);
+    }
+    70% {
+      transform: rotate(10deg) translateY(-1px);
+    }
+    78% {
+      transform: rotate(-8deg) translateY(0);
+    }
+    86% {
+      transform: rotate(4deg) translateY(0);
+    }
+  }
+
+  @keyframes ring-pulse {
+    0% {
+      opacity: 0.85;
+      transform: scale(0.35);
+    }
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.7);
+    }
+  }
+
+  .phone-shake {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ring-shake 2.4s ease-in-out infinite;
+  }
+
+  .ring-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ring-pulse 2.4s ease-out infinite;
+  }
+
+  .ring-pulse-late {
+    animation-delay: 1.2s;
+  }
+
+  /* One node lights up at a time, in execution order, like an n8n run. */
+  @keyframes node-run {
+    0%,
+    10% {
+      border-color: rgba(255, 255, 255, 0.18);
+      color: var(--hero-muted);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    3%,
+    7% {
+      border-color: rgba(150, 180, 255, 0.9);
+      color: #dbe6ff;
+      background: rgba(36, 85, 242, 0.35);
+    }
+  }
+
+  .node-run {
+    animation: node-run 12s infinite;
+  }
+
+  /* Equalizer bars for the call player. They only run while audio plays. */
+  @keyframes wave {
+    0%,
+    100% {
+      transform: scaleY(0.25);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  .wave-bar {
+    transform-origin: center;
+    animation: wave 1.1s ease-in-out infinite;
+  }
+
+  .wave-still {
+    animation-play-state: paused;
+    transform: scaleY(0.25);
+  }
+
+  /* Slow drift for the hero glow, answers nothing, stays subtle. */
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(-3%, 4%, 0) scale(1.05);
+    }
+  }
+
+  .hero-glow {
+    animation: drift 14s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .node-run,
+  .wave-bar,
+  .hero-glow,
+  .marquee-track,
+  .phone-shake,
+  .ring-pulse {
+    animation: none;
+  }
+}
+
+/* static (reduced motion) ledger is hidden unless the user asks for
+   reduced motion; the pinned version is hidden then instead */
+.replay.alternate {
+  display: none;
+  padding: 4rem 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .replay-motion {
+    display: none;
+  }
+
+  .replay.alternate {
+    display: block;
+  }
+}
+
+/* ================= Scroll-driven call replay =================
+   Warm neutral canvas like the reference: one centered statement,
+   then the real chat bubbles scattered around it. Scoped custom
+   properties so the section never leaks styles. */
+
+.replay {
+  --rs-bg: var(--bg);
+  --rs-surface: var(--surface);
+  --rs-line: var(--line);
+  --rs-fg: var(--fg);
+  --rs-muted: var(--muted);
+  --rs-accent: var(--accent);
+  --rs-track: 0;
+  position: relative;
+  background: var(--rs-bg);
+  color: var(--rs-fg);
+  padding-bottom: 5rem;
+}
+
+.replay * {
+  margin: 0;
+}
+
+.replay-skip {
+  position: absolute;
+  bottom: 1.4rem;
+  right: 1.4rem;
+  z-index: 60;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--rs-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--rs-muted);
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.replay-skip:hover {
+  color: var(--rs-accent);
+  border-color: var(--rs-accent);
+}
+
+/* progress rail */
+.replay-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--rs-line);
+  z-index: 20;
+}
+
+.replay-rail-fill {
+  position: absolute;
+  inset: 0;
+  top: calc((1 - var(--rs-track)) * 100%);
+  background: var(--rs-accent);
+}
+
+.replay-progress-label {
+  position: absolute;
+  left: 14px;
+  bottom: 1.5rem;
+  z-index: 20;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  color: var(--rs-muted);
+}
+
+/* pin stage */
+.replay-stage {
+  position: relative;
+  height: 86svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 4.8rem;
+}
+
+/* headline */
+.rs-headline {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 64rem;
+  margin: 0 auto;
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+}
+
+.rs-line {
+  display: block;
+}
+
+/* scattered conversation field */
+.replay-flow {
+  position: relative;
+  flex: 1;
+}
+
+/* chat bubbles */
+.replay-msg {
+  position: absolute;
+  max-width: 320px;
+  display: flex;
+  z-index: 4;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.replay-msg.agent {
+  flex-direction: row;
+}
+
+.replay-msg.user {
+  flex-direction: row;
+}
+
+.rs-in {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  animation: rs-drift 5.2s ease-in-out infinite alternate;
+}
+
+.replay-msg.user .rs-in {
+  animation-duration: 6.1s;
+  animation-delay: 1.2s;
+}
+
+.replay-msg:nth-child(3) .rs-in {
+  animation-duration: 4.6s;
+  animation-delay: 0.4s;
+}
+
+@keyframes rs-drift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+.av {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 13px;
+}
+
+.av-agent {
+  background: var(--fg);
+  color: #ffffff;
+}
+
+.av-user {
+  background: var(--rs-surface);
+  border: 1px solid var(--rs-line);
+  color: var(--rs-fg);
+}
+
+.rs-txt {
+  position: relative;
+  background: var(--rs-surface);
+  border: 1px solid var(--rs-line);
+  border-radius: 1.2rem;
+  padding: 0.65rem 0.95rem;
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: 0 2px 10px rgba(10, 16, 46, 0.06);
+}
+
+.replay-msg.agent .rs-txt {
+  border-bottom-left-radius: 0.35rem;
+}
+
+.replay-msg.user .rs-txt {
+  border-bottom-right-radius: 0.35rem;
+}
+
+.rs-time {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 10px;
+  color: var(--rs-muted);
+  margin-left: 0.4rem;
+  white-space: nowrap;
+}
+
+/* typing dots before agent lines */
+.rs-typing {
+  position: absolute;
+  left: 9%;
+  top: 34%;
+  z-index: 3;
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  align-items: center;
+  gap: 5px;
+  padding: 0.7rem 1rem;
+  background: var(--rs-surface);
+  border: 1px solid var(--rs-line);
+  border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(10, 16, 46, 0.06);
+}
+
+.rs-typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--rs-muted);
+}
+
+/* summary toast */
+.rs-toast {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  width: min(360px, 92%);
+  background: var(--rs-surface);
+  border: 1px solid var(--rs-line);
+  border-radius: 1.2rem;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  box-shadow: 0 18px 44px rgba(10, 16, 46, 0.12);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.rs-toast-kicker {
+  display: inline-block;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--rs-accent);
+  margin-bottom: 0.5rem;
+}
+
+.rs-toast-line {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--rs-fg);
+}
+
+/* small honest note */
+.rs-callnote {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  transform: translateX(-50%);
+  z-index: 7;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 12px;
+  color: var(--rs-muted);
+  opacity: 0;
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+/* google calendar finale */
+.replay-cal {
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+  transform: translateX(-50%);
+  z-index: 9;
+  width: min(360px, 92%);
+  border: 1px solid var(--rs-line);
+  border-radius: 1rem;
+  background: var(--rs-surface);
+  overflow: visible;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 18px 44px rgba(10, 16, 46, 0.12);
+}
+
+.replay-cal-head {
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--rs-line);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.replay-cal-chip {
+  width: 42px;
+  height: 42px;
+  border-radius: 0.55rem;
+  background: var(--rs-accent);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.replay-cal-chip em {
+  font-style: normal;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+}
+
+.replay-cal-chip strong {
+  font-size: 18px;
+  line-height: 1.05;
+}
+
+.replay-cal-titles strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.replay-cal-titles span {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11px;
+  color: var(--rs-muted);
+}
+
+.replay-cal-body {
+  padding: 0.8rem 0.9rem 0.9rem;
+}
+
+.replay-gcal-event {
+  display: block;
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border: 1.5px dashed var(--rs-muted);
+  color: var(--rs-muted);
+  transform-origin: center;
+}
+
+.replay-gcal-event strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.replay-gcal-event span {
+  font-size: 12px;
+}
+
+.replay-cal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.replay-sync {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #188038;
+}
+
+.replay-open {
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 11.5px;
+  color: var(--rs-accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.replay-open:hover {
+  text-decoration: underline;
+}
+
+/* reduced motion: static ledger shown via media query */
+.replay.alternate {
+  display: none;
+  padding: 4rem 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .replay-motion {
+    display: none;
+  }
+
+  .replay.alternate {
+    display: block;
+  }
+}
+
+.replay.alternate .replay-stage {
+  position: static;
+  height: auto;
+  overflow: visible;
+  padding-top: 0;
+}
+
+.replay.alternate .replay-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  max-width: 44rem;
+  margin: 2rem auto 0;
+}
+
+.replay.alternate .replay-msg {
+  position: static;
+  max-width: 86%;
+  opacity: 1;
+  visibility: visible;
+}
+
+.replay.alternate .rs-callnote,
+.replay.alternate .rs-typing {
+  display: none;
+}
+
+.replay.alternate .rs-toast {
+  position: static;
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  margin: 1rem auto 0;
+}
+
+.replay.alternate .replay-cal {
+  position: static;
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  margin: 1.2rem 0 0;
+}
+
+.replay.alternate .replay-gcal-event {
+  background: var(--rs-accent);
+  border: 1.5px solid var(--rs-accent);
+  color: #ffffff;
+}
+
+.replay.alternate .replay-cal-actions {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .replay .rs-in {
+    animation-play-state: running;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .replay .rs-in {
+    animation: none;
+  }
+}
+
+/* mobile: same single column, bubbles stack instead of scattering */
+@media (max-width: 899px) {
+  .replay-stage {
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+    padding-top: 7.4rem;
+  }
+
+  .rs-headline {
+    font-size: clamp(1.35rem, 5.6vw, 1.75rem);
+  }
+
+  .replay-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-top: 1.2rem;
+  }
+
+  .replay-flow .replay-msg {
+    position: static;
+    left: auto !important;
+    top: auto !important;
+    width: auto !important;
+    max-width: 88%;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .rs-txt {
+    font-size: 12px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .rs-typing {
+    left: 8%;
+    top: 36%;
+  }
+
+  .rs-callnote {
+    display: none;
+  }
+
+  .replay-cal-actions {
+    justify-content: center;
+  }
 }

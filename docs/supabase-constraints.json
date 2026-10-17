@@ -1,0 +1,52 @@
+[
+  {
+    "table_name": "appointments",
+    "conname": "appointments_lead_id_fkey",
+    "definition": "FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE"
+  },
+  {
+    "table_name": "appointments",
+    "conname": "appointments_pkey",
+    "definition": "PRIMARY KEY (id)"
+  },
+  {
+    "table_name": "appointments",
+    "conname": "appointments_status_check",
+    "definition": "CHECK ((status = ANY (ARRAY['booked'::text, 'rescheduled'::text, 'cancelled'::text])))"
+  },
+  {
+    "table_name": "booking_holds",
+    "conname": "booking_holds_lead_id_fkey",
+    "definition": "FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE"
+  },
+  {
+    "table_name": "booking_holds",
+    "conname": "booking_holds_pkey",
+    "definition": "PRIMARY KEY (id)"
+  },
+  {
+    "table_name": "booking_holds",
+    "conname": "booking_holds_status_check",
+    "definition": "CHECK ((status = ANY (ARRAY['pending'::text, 'confirmed'::text, 'expired'::text])))"
+  },
+  {
+    "table_name": "call_logs",
+    "conname": "call_logs_lead_id_fkey",
+    "definition": "FOREIGN KEY (lead_id) REFERENCES leads(id) ON DELETE CASCADE"
+  },
+  {
+    "table_name": "call_logs",
+    "conname": "call_logs_pkey",
+    "definition": "PRIMARY KEY (id)"
+  },
+  {
+    "table_name": "leads",
+    "conname": "leads_pkey",
+    "definition": "PRIMARY KEY (id)"
+  },
+  {
+    "table_name": "leads",
+    "conname": "leads_status_check",
+    "definition": "CHECK ((status = ANY (ARRAY['new'::text, 'qualified'::text, 'booked'::text, 'lost'::text])))"
+  }
+]

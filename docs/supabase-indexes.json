@@ -1,0 +1,47 @@
+[
+  {
+    "tablename": "leads",
+    "indexname": "leads_pkey",
+    "indexdef": "CREATE UNIQUE INDEX leads_pkey ON public.leads USING btree (id)"
+  },
+  {
+    "tablename": "call_logs",
+    "indexname": "call_logs_pkey",
+    "indexdef": "CREATE UNIQUE INDEX call_logs_pkey ON public.call_logs USING btree (id)"
+  },
+  {
+    "tablename": "call_logs",
+    "indexname": "idx_call_logs_lead_id",
+    "indexdef": "CREATE INDEX idx_call_logs_lead_id ON public.call_logs USING btree (lead_id)"
+  },
+  {
+    "tablename": "booking_holds",
+    "indexname": "booking_holds_pkey",
+    "indexdef": "CREATE UNIQUE INDEX booking_holds_pkey ON public.booking_holds USING btree (id)"
+  },
+  {
+    "tablename": "booking_holds",
+    "indexname": "idx_booking_holds_lead_id",
+    "indexdef": "CREATE INDEX idx_booking_holds_lead_id ON public.booking_holds USING btree (lead_id)"
+  },
+  {
+    "tablename": "booking_holds",
+    "indexname": "idx_booking_holds_status_expires",
+    "indexdef": "CREATE INDEX idx_booking_holds_status_expires ON public.booking_holds USING btree (status, expires_at)"
+  },
+  {
+    "tablename": "appointments",
+    "indexname": "appointments_pkey",
+    "indexdef": "CREATE UNIQUE INDEX appointments_pkey ON public.appointments USING btree (id)"
+  },
+  {
+    "tablename": "appointments",
+    "indexname": "idx_appointments_lead_id",
+    "indexdef": "CREATE INDEX idx_appointments_lead_id ON public.appointments USING btree (lead_id)"
+  },
+  {
+    "tablename": "appointments",
+    "indexname": "idx_appointments_scheduled_at",
+    "indexdef": "CREATE INDEX idx_appointments_scheduled_at ON public.appointments USING btree (scheduled_at)"
+  }
+]
