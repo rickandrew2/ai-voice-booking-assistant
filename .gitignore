@@ -28,6 +28,10 @@
 /.agents/
 /.claude/
 
+# local-only source material (real caller payload + workflow export with tokens)
+/docs/retell-payload.json
+/docs/03-ai-voice-booking-assistant.json
+
 # playwright
 /test-results/
 /playwright-report/
