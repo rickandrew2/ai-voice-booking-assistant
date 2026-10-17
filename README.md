@@ -22,4 +22,4 @@ Next.js 16 (App Router, cache components), React 19, Tailwind v4 on the token pa
 
 ## Local-only source material
 
-`docs/retell-payload.json` (the real caller's raw payload) and `docs/03-ai-voice-booking-assistant.json` (the workflow export, which embeds runtime tokens) contain personal data and credentials, so they are deliberately excluded from this repository and kept local. Schema exports, probe results, and the generated, masked data file are safe and included.
+`docs/retell-payload.json` (the real caller's raw payload) and `docs/03-ai-voice-booking-assistant.json` (the workflow export, which embeds runtime tokens) contain personal data and credentials, so they are intentionally not part of this repository. Schema exports, probe results, and the generated, masked data file (`lib/replay-data.ts`) are safe and included; the one recorded call they describe is fully represented here through those files.
